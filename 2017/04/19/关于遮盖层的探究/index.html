@@ -1,6 +1,34 @@
-<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description"><meta name="keywords" content="Hexo, Gruntjs, Nodejs, Reactjs, Vuejs"><title>关于遮盖层的探究 - Hexo</title><link rel="stylesheet" href="/css/main_style.min.css"><link rel="icon" href="/AKL.ico"></head><body><input id="navi" type="checkbox"><ul class="main-navication"><li><a href="/"><span>Home</span></a></li><li><a href="https://github.com"><span>Github</span></a></li><li><a href="http://www.luoluokk.club"><span>personal homepage</span></a></li><li><a href="http://www.jianshu.com/u/45d0817cb7cc"><span>study notes</span></a></li></ul><div class="wrapper" id="wrap"><div class="post-header"><label class="navi-button light" for="navi">MENU</label><img class="background" src="http://callfiles.ueibo.com/hexo-theme-laughing/page_background.jpg"><div class="post-title"><h1 class="title">关于遮盖层的探究</h1><ul class="meta"><li><i class="icon icon-author"></i>洛洛</li><li><i class="icon icon-clock"></i>0 Minutes</li><li><i class="icon icon-calendar"></i>April 19, 2017</li></ul></div></div><div class="article-content" style="max-width:800px"><pre><code>通常我们进行页面效果展示的时候，经常会看到一个效果，如下
-</code></pre><p><img src="../img/zhe1.png" alt="遮盖层"></p>
-</div><div class="article-meta" style="max-width:800px"></div><div class="article-comment" style="max-width:800px"><div class="ds-thread" id="ds-thread" data-thread-key="cj1oqxb9a00009uztvpwm74eh" data-title="关于遮盖层的探究" data-url="http://yoursite.com/2017/04/19/关于遮盖层的探究/" site-name="ueibo"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description"><meta name="keywords" content="Hexo, Gruntjs, Nodejs, Reactjs, Vuejs"><title>关于遮盖层的探究 - Hexo</title><link rel="stylesheet" href="/css/main_style.min.css"><link rel="icon" href="/AKL.ico"></head><body><input id="navi" type="checkbox"><ul class="main-navication"><li><a href="/"><span>Home</span></a></li><li><a href="https://github.com"><span>Github</span></a></li><li><a href="http://www.luoluokk.club"><span>personal homepage</span></a></li><li><a href="http://www.jianshu.com/u/45d0817cb7cc"><span>study notes</span></a></li></ul><div class="wrapper" id="wrap"><div class="post-header"><label class="navi-button light" for="navi">MENU</label><img class="background" src="http://callfiles.ueibo.com/hexo-theme-laughing/page_background.jpg"><div class="post-title"><h1 class="title">关于遮盖层的探究</h1><ul class="meta"><li><i class="icon icon-author"></i>洛洛</li><li><i class="icon icon-clock"></i>3 Minutes</li><li><i class="icon icon-calendar"></i>April 19, 2017</li></ul></div></div><div class="article-content" style="max-width:800px"><p>通常我们进行页面效果展示的时候，经常会看到一个效果，如下</p>
+<p><img src="/img/zhe1.png" alt="图"></p>
+<p>这个效果非常简单，绝大多数人都会想到在上面盖一个div，并设置div的背景色为<code>rgba(0,0,0,0)</code>，hover时将背景色改为<code>rgba(0,0,0,0.5)</code>就可以完成以上效果</p>
+<font color="red" face="“黑体”">但是这多使用了一个div，显然不是非常理想</font>
+
+<p>然后我们会想到减少一个div的方式，CSS3中的混合模式</p>
+<p>效果如下</p>
+<p><img src="/img/zhe2.png" alt="图"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">div&#123;</div><div class="line">	width: 200px;</div><div class="line">	height: 200px;</div><div class="line">	background-image: url(277170.jpg);</div><div class="line">	background-size: 100% 100%;</div><div class="line">	background-color: gray;  </div><div class="line"> 	background-blend-mode: multiply; </div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>如上中使用的<code>background-blend-mode: multiply;</code>就是混合模式</p>
+<p>具体原理为，设置一个灰色背景，与背景图进行正片叠底，以达到模板效果</p>
+<font color="red" face="“黑体”">效果非常好，也减少了不必要的div，然而兼容性相当差</font>
+
+
+<p>不过基本的需求都是能够满足了</p>
+<p>但是有一种场景，经常遇到，却用以上2中方式都不适合</p>
+<p>效果如下图</p>
+<p><img src="/img/zhe3.png" alt="图"></p>
+<p>登录界面，基本都会采用周围变黑，已达到视觉上聚焦的效果</p>
+<p>这种情景下，若采用增加一个div，那么当点击关闭时，所需要进行的是，将登录窗口关闭，同时隐藏模板，显然不够理想</p>
+<p>若采用混合模式，同样关闭登录窗口，还需要更改背后整个页面的样式</p>
+<p>因此，我们可以想着是否有一个办法，只需要进行最基本的关闭登录窗口就可以完成以上所有效果，想达到理想化，唯一的办法就是将整个背景的蒙版绑定在登录窗口上。<table><tr><td bgcolor="orange">由此我们可以想到一个属性 box-shadow</td></tr></table></p>
+<p>具体实现代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">div&#123;</div><div class="line">	width: 60%;</div><div class="line">	height: 30%;</div><div class="line">	background: url(guize.png) no-repeat 0 0 /100% 100%;</div><div class="line">	position: absolute;</div><div class="line">	left: 20%;</div><div class="line">	top: 20%;</div><div class="line">	box-shadow: 0 0 0 50vmax rgba(0,0,0,0.5);</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>这里采用了一个单位 <span style="background:orange">vmax</span></p>
+<table><tr><td bgcolor="black"><font color="white" face="“黑体”">这里简单介绍一下:1vmax 相当于 1vw 和 1vh 两者中的较大值。100vw 等于整 个视口的宽度,100vh 就是视口的高度。因此,满足我们需求的最小值就是 50vmax。由于投影是同时向四个方向扩展的,这个遮罩层的最终尺寸将是 100vmax 加上元素本身的尺寸。</font></td></tr></table>
+
+
+<p>总结：以上为个人写项目时所总结的页面蒙版效果实现及各种情景的最优解，如有更好的方案，望留言</p>
+<p>by 洛洛</p>
+</div><div class="article-meta" style="max-width:800px"></div><div class="article-comment" style="max-width:800px"><div class="ds-thread" id="ds-thread" data-thread-key="cj1ovcvux00003nztli21jvo3" data-title="关于遮盖层的探究" data-url="http://yoursite.com/2017/04/19/关于遮盖层的探究/" site-name="ueibo"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
 var duoshuoQuery = {short_name: siteName};
 (function() {
   var ds = document.createElement('script');
