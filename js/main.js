@@ -1,144 +1,175 @@
-require([], function (){
+var Tips = (function(){
 
-    var isMobileInit = false;
-    var loadMobile = function(){
-        require([yiliaConfig.rootUrl + 'js/mobile.js'], function(mobile){
-            mobile.init();
-            isMobileInit = true;
-        });
-    }
-    var isPCInit = false;
-    var loadPC = function(){
-        require([yiliaConfig.rootUrl + 'js/pc.js'], function(pc){
-            pc.init();
-            isPCInit = true;
-        });
-    }
+	var $tipBox = $(".tips-box");
 
-    var browser={
-        versions:function(){
-        var u = window.navigator.userAgent;
-        return {
-            trident: u.indexOf('Trident') > -1, //IE内核
-            presto: u.indexOf('Presto') > -1, //opera内核
-            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-            iPad: u.indexOf('iPad') > -1, //是否为iPad
-            webApp: u.indexOf('Safari') == -1 ,//是否为web应用程序，没有头部与底部
-            weixin: u.indexOf('MicroMessenger') == -1 //是否为微信浏览器
-            };
-        }()
-    }
+	var bind = function(){
 
-    $(window).bind("resize", function(){
-        if(isMobileInit && isPCInit){
-            $(window).unbind("resize");
-            return;
-        }
-        var w = $(window).width();
-        if(w >= 700){
-            loadPC();
-        }else{
-            loadMobile();
-        }
-    });
+	}
 
-    if(browser.versions.mobile === true || $(window).width() < 700){
-        loadMobile();
-    }else{
-        loadPC();
-    }
+	bind();
+	return {
+		show: function(){
+			$tipBox.removeClass("hide");
+		},
+		hide: function(){
+			$tipBox.addClass("hide");
+		},
+		init: function(){
+			
+		}
+	}
+})();
 
-    //是否使用fancybox
-    if(yiliaConfig.fancybox === true){
-        require([yiliaConfig.rootUrl + 'fancybox/jquery.fancybox.js'], function(pc){
-            var isFancy = $(".isFancy");
-            if(isFancy.length != 0){
-                var imgArr = $(".article-inner img");
-                for(var i=0,len=imgArr.length;i<len;i++){
-                    var src = imgArr.eq(i).attr("src");
-                    var title = imgArr.eq(i).attr("alt");
-                    imgArr.eq(i).replaceWith("<a href='"+src+"' title='"+title+"' rel='fancy-group' class='fancy-ctn fancybox'><img src='"+src+"' title='"+title+"'></a>");
-                }
-                $(".article-inner .fancy-ctn").fancybox();
-            }
-        });
+var BackPic = (function(){
+	var pics = ['http://7ximdq.com1.z0.glb.clouddn.com/1432371755835?imageView2/2/w/600/format/jpg',
+                'http://7ximdq.com1.z0.glb.clouddn.com/1432458568441?imageView2/2/w/660/format/jpg',
+                'http://7ximdq.com1.z0.glb.clouddn.com/1432458576572?imageView2/2/w/640/format/jpg',
+                'http://7ximdq.com1.z0.glb.clouddn.com/1432456940456?imageView2/2/w/640/format/jpg',
+                'http://7ximdq.com1.z0.glb.clouddn.com/1432458590760?imageView2/2/w/640/format/jpg',
+                'http://7ximdq.com1.z0.glb.clouddn.com/1432458591836?imageView2/2/w/650/format/jpg',
+                'http://7ximdq.com1.z0.glb.clouddn.com/1432458593460?imageView2/2/w/600/format/jpg',
+                'http://7ximdq.com1.z0.glb.clouddn.com/1432457205540?imageView2/2/w/550/format/jpg'];
+	var num = Math.floor(Math.random()*pics.length);
+	var url = pics[num];
+	return {
+		init: function(){
+			//$('.left-col').css('background', 'url('+ url +') center no-repeat');
+			$.ajax({
+				url: 'http://weiboxb.sinaapp.com/background',
+				type: 'POST',
+				data: { bg: 'bg'},
+				success: function(url) {
+					$('.left-col').css('background', 'url('+ url +') no-repeat center');
+				},
+				error: function(e) {
+					$('.left-col').css('background', 'url('+ url +') no-repeat center');
+				}
+			})
+		}
+	}
+})();
 
-    }
-    //是否开启动画
-    if(yiliaConfig.animate === true){
+var Main = (function(){
 
-        require([yiliaConfig.rootUrl + 'js/jquery.lazyload.js'], function(){
-            //avatar
-            $(".js-avatar").attr("src", $(".js-avatar").attr("lazy-src"));
-            $(".js-avatar")[0].onload = function(){
-                $(".js-avatar").addClass("show");
-            }
-        });
+	var resetTags = function(){
+		var tags = $(".tagcloud a");
+		tags.css({"font-size": "12px"});
+		for(var i=0,len=tags.length; i<len; i++){
+			//var num = parseInt(Math.random()*5+1);
+			var num = tags.eq(i).html().length % 5 +1;
+			tags[i].className = "";
+			tags.eq(i).addClass("color"+num);
+		}
+	}
 
-      if(yiliaConfig.isHome === true) {
-        // 滚动条监听使用scrollreveal.js
-        // https://github.com/jlmakes/scrollreveal.js
-        // 使用cdn[//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js]
-        require([
-          '//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js'
-        ], function (ScrollReveal) {
-          // 更多animation:
-          // http://daneden.github.io/animate.css/
-          var animationNames = [
-            "pulse", "fadeIn","fadeInRight", "flipInX", "lightSpeedIn","rotateInUpLeft", "slideInUp","zoomIn",
-            ],
-            len = animationNames.length,
-            randomAnimationName = animationNames[Math.ceil(Math.random() * len) - 1];
+	var slide = function(idx){
+		var $wrap = $(".switch-wrap");
+		$wrap.css({
+			"transform": "translate(-"+idx*100+"%, 0 )"
+		});
+		$(".icon-wrap").addClass("hide");
+		$(".icon-wrap").eq(idx).removeClass("hide");
+	}
 
-          // ie9 不支持css3 keyframe动画, safari不支持requestAnimationFrame, 不使用随机动画，切回原来的动画
-          if (!window.requestAnimationFrame) {
-              $('.body-wrap > article').css({opacity: 1});
+	var bind = function(){
+		var switchBtn = $("#myonoffswitch");
+		var tagcloud = $(".second-part");
+		var navDiv = $(".first-part");
+		switchBtn.click(function(){
+			if(switchBtn.hasClass("clicked")){
+				switchBtn.removeClass("clicked");
+				tagcloud.removeClass("turn-left");
+				navDiv.removeClass("turn-left");
+			}else{
+				switchBtn.addClass("clicked");
+				tagcloud.addClass("turn-left");
+				navDiv.addClass("turn-left");
+				resetTags();
+			}
+		});
 
-              if (navigator.userAgent.match(/Safari/i)) {
-                  function showArticle(){
-                      $(".article").each(function(){
-                          if( $(this).offset().top <= $(window).scrollTop()+$(window).height() && !($(this).hasClass('show')) ) {
-                              $(this).removeClass("hidden").addClass("show");
-                              $(this).addClass("is-hiddened");
-                          }else{
-                              if(!$(this).hasClass("is-hiddened")){
-                                  $(this).addClass("hidden");
-                              }
-                          }
-                      });
-                  }
-                  $(window).on('scroll', function(){
-                      showArticle();
-                  });
-                  showArticle();
-              }
-              return;
-          }
-          // document.body有些浏览器不支持监听scroll，所以使用默认的document.documentElement
-          ScrollReveal({
-            duration: 0,
-            afterReveal: function (domEl) {
-              // safari不支持requestAnimationFrame不支持document.documentElement的onscroll所以这里不会执行
-              // 初始状态设为opacity: 0, 动画效果更平滑一些(由于脚本加载是异步，页面元素渲染后在执行动画，感觉像是延时)
-              $(domEl).addClass('animated ' + randomAnimationName).css({opacity: 1});
-            }
-          }).reveal('.body-wrap > article');
+		var timeout;
+		var isEnterBtn = false;
+		var isEnterTips = false;
 
-        });
-      } else {
-        $('.body-wrap > article').css({opacity: 1});
-      }
+		$(".icon").bind("mouseenter", function(){
+			isEnterBtn = true;
+			Tips.show();
+		}).bind("mouseleave", function(){
+			isEnterBtn = false;
+			setTimeout(function(){
+				if(!isEnterTips){
+					Tips.hide();
+				}
+			}, 100);
+		});
 
-    }
+		$(".tips-box").bind("mouseenter", function(){
+			isEnterTips = true;
+			Tips.show();
+		}).bind("mouseleave", function(){
+			isEnterTips = false;
+			setTimeout(function(){
+				if(!isEnterBtn){
+					Tips.hide();
+				}
+			}, 100);
+		});
 
-    //是否新窗口打开链接
-    if(yiliaConfig.open_in_new == true){
-        $(".article a[href]").attr("target", "_blank")
-    }
-    $(".archive-article-title").attr("target", "_blank");
-});
+		$(".tips-inner li").bind("click", function(){
+			var idx = $(this).index();
+			slide(idx);
+			Tips.hide();
+		});
+	}
+
+	var fancyInit = function(){
+		var isFancy = $(".isFancy");
+		if(isFancy.length != 0){
+			var imgArr = $(".article-inner img");
+			for(var i=0,len=imgArr.length;i<len;i++){
+				var src = imgArr.eq(i).attr("src");
+				var title = imgArr.eq(i).attr("alt");
+				imgArr.eq(i).replaceWith("<a href='"+src+"' title='"+title+"' rel='fancy-group' class='fancy-ctn fancybox'><img src='"+src+"' title='"+title+"'></a>");
+			}
+			$(".article-inner .fancy-ctn").fancybox();
+		}
+	}
+
+	var enterAnm = function(){
+		//avatar
+		$(".js-avatar").attr("src", $(".js-avatar").attr("lazy-src"));
+		$(".js-avatar")[0].onload = function(){
+			$(".js-avatar").addClass("show");
+		}
+
+		//article
+		function showArticle(){
+			$(".article").each(function(){
+				if( $(this).offset().top <= $(window).scrollTop()+$(window).height()*0.75 && !$(this).hasClass('show') ) {
+					$(this).addClass("show");
+				}
+			});
+		}
+		$(window).on('scroll', function(){
+			showArticle();
+		});
+		showArticle();
+	}
+
+	return {
+		init: function(){
+			resetTags();
+			bind();
+			enterAnm();
+			fancyInit();
+			Tips.init();
+			BackPic.init();
+			new Mobile({
+				ctn: document.getElementsByClassName("slider-trigger")[0]
+			});
+		}
+	}
+})();
+
+$(Main.init());
