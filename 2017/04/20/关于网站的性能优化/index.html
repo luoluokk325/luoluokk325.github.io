@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description"><meta name="keywords" content="Hexo, Gruntjs, Nodejs, Reactjs, Vuejs"><title>关于网站的性能优化 - myblog-luo</title><link rel="stylesheet" href="/css/main_style.min.css"><link rel="icon" href="/AKL.ico"></head><body><input id="navi" type="checkbox"><ul class="main-navication"><li><a href="/"><span>Home</span></a></li><li><a href="https://github.com"><span>Github</span></a></li><li><a href="http://www.luoluokk.club"><span>personal homepage</span></a></li><li><a href="http://www.jianshu.com/u/45d0817cb7cc"><span>study notes</span></a></li></ul><div class="wrapper" id="wrap"><div class="post-header"><label class="navi-button light" for="navi">MENU</label><img class="background" src="http://callfiles.ueibo.com/hexo-theme-laughing/page_background.jpg"><div class="post-title"><h1 class="title">关于网站的性能优化</h1><ul class="meta"><li><i class="icon icon-author"></i>洛洛</li><li><i class="icon icon-clock"></i>1 Minutes</li><li><i class="icon icon-calendar"></i>April 20, 2017</li></ul></div></div><div class="article-content" style="max-width:800px"><h1 id="本文主要介绍移动端H5页面的性能优化方案"><a href="#本文主要介绍移动端H5页面的性能优化方案" class="headerlink" title="本文主要介绍移动端H5页面的性能优化方案"></a><center>本文主要介绍移动端H5页面的性能优化方案</center></h1><h2 id="虽然是移动端，但基本方法在PC端同样适用"><a href="#虽然是移动端，但基本方法在PC端同样适用" class="headerlink" title="虽然是移动端，但基本方法在PC端同样适用"></a><center>虽然是移动端，但基本方法在PC端同样适用</center></h2><h3 id="加载优化"><a href="#加载优化" class="headerlink" title="加载优化"></a>加载优化</h3><ol>
+<li>合并CSS、JavaScript</li>
+<li>合并小图片，适用精灵图</li>
+<li>缓存一切可缓存的资源</li>
+<li>使用长Cache</li>
+<li>使用外联式引用CSS、JavaScript</li>
+<li>压缩HTML、CSS、JavaScript(将代码去空格等)</li>
+<li>使用首屏加载(预加载)</li>
+<li>使用按需求加载(懒加载)</li>
+<li>增加Loading进度条</li>
+<li>减少Cookie</li>
+<li>通过Media Query加载</li>
+<li>避免重定向</li>
+<li>异步加载第三方资源</li>
+</ol>
+<h3 id="CSS优化"><a href="#CSS优化" class="headerlink" title="CSS优化"></a>CSS优化</h3><ol>
+<li>CSS写在头部，JavaScript</li>
+<li>避免图片和iFrame等的空src</li>
+<li>尽量避免重设图片大小</li>
+<li>图片尽量避免使用DataURL</li>
+<li>尽量避免在HTML标签中写Style属性</li>
+<li>避免CSS表达式(严重注意)</li>
+<li>移除空的CSS规则</li>
+<li>正确使用Display的属性</li>
+<li>不滥用Float</li>
+<li>不滥用Web字体</li>
+<li>不声明过多的font-size</li>
+<li>值为0时不使用单位</li>
+<li>标准化各种浏览器前缀</li>
+</ol>
+<h3 id="图片处理优化"><a href="#图片处理优化" class="headerlink" title="图片处理优化"></a>图片处理优化</h3><ol>
+<li>使用智图</li>
+<li>使用(CSS,SVG,IconFont)代替图片</li>
+<li>使用Srcset</li>
+<li>webP优于JPG</li>
+<li>PNG8优于GIF</li>
+<li>首次加载不大于1014kb</li>
+<li>图片不宽于640</li>
+</ol>
+<h3 id="脚本优化"><a href="#脚本优化" class="headerlink" title="脚本优化"></a>脚本优化</h3><ol>
+<li>减少重绘和回流</li>
+<li>缓存Dom选择与计算</li>
+<li>缓存列表length</li>
+<li>尽量使用事件代理，避免批量绑定事件</li>
+<li>使用touchstart、touchend代替click</li>
+</ol>
+<h3 id="渲染优化"><a href="#渲染优化" class="headerlink" title="渲染优化"></a>渲染优化</h3><ol>
+<li>HTML使用Viewport</li>
+<li>减少Dom节点</li>
+<li>尽量使用CSS3动画</li>
+<li>合理使用requestAnimationFrame动画代替定时器</li>
+<li>适当使用Canvas动画</li>
+<li>Touchmove，Scroll事件会导致多次渲染</li>
+</ol>
+<p>暂时整理</p>
+</div><div class="article-meta" style="max-width:800px"></div><div class="article-comment" style="max-width:800px"><div class="ds-thread" id="ds-thread" data-thread-key="cj1qfcqmn0000uozt1ewtwvjt" data-title="关于网站的性能优化" data-url="http://yoursite.com/2017/04/20/关于网站的性能优化/" site-name="ueibo"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
+var duoshuoQuery = {short_name: siteName};
+(function() {
+  var ds = document.createElement('script');
+  ds.type = 'text/javascript';ds.async = true;
+  ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+  ds.charset = 'UTF-8';
+  (document.getElementsByTagName('head')[0] 
+  || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></div><ul class="navication"><li class="home"><a href="/"><i class="icon icon-home"></i></a></li><li><a href="/2017/04/19/关于遮盖层的探究/"><i class="icon icon-arror-left"></i></a></li></ul><div class="page-footer"><div class="top"><ul class="social"><li><a href="https://github.com" title="Github" target="_blank"><i class="icon icon-github"></i></a></li><li><a href="http://www.luoluokk.club" title="个人主页" target="_blank"><i class="icon icon-author"></i></a></li><li><a href="http://www.jianshu.com/u/45d0817cb7cc" title="简书" target="_blank"><i class="icon icon-clock"></i></a></li></ul></div><div class="bottom"><p class="copyright">© 2017 myblog-luo<br><small>POWER BY <a href="https://hexo.io" target="_blank">HEXO</a></small><small>, THEME BY <a href="https://github.com/BoizZ/hexo-theme-laughing" target="_blank">LAUGHING</a></small></p></div></div></div><script>var wrap = document.getElementById('wrap');
+window.onload = function () {
+  wrap.className += ' done';
+}</script></body></html>
